@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard - Sistema de Monitoramento Ambiental</title>
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/chart.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="img/logo.png" alt="Logo" height="30" class="d-inline-block align-text-top me-2" />
+                        Sistema de Monitoramento Ambiental
+                    </a>
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="index.html">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="historico.html">Histórico</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="relatorios.html">Relatórios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="config.html">Configurações</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Visão Geral</h5>
+                            <div>
+                                <span class="badge bg-success me-2">Última atualização: <span id="last-update">Carregando...</span></span>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary" id="refresh-btn">
+                                        <img src="img/icons/refresh.svg" alt="Atualizar" width="16" height="16" /> Atualizar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                                        <img src="img/icons/clock.svg" alt="Atualização" width="16" height="16" /> Atualização
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" data-interval="0">Manual</a></li>
+                                        <li><a class="dropdown-item" href="#" data-interval="30">A cada 30s</a></li>
+                                        <li><a class="dropdown-item" href="#" data-interval="60">A cada 1m</a></li>
+                                        <li><a class="dropdown-item active" href="#" data-interval="300">A cada 5m</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Temperatura Média</h5>
+                                            <div class="display-4 mb-2" id="avg-temperature">--</div>
+                                            <div class="small text-muted">Intervalo ideal: 20-26°C</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Umidade Média</h5>
+                                            <div class="display-4 mb-2" id="avg-humidity">--</div>
+                                            <div class="small text-muted">Intervalo ideal: 40-60%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Qualidade do Ar</h5>
+                                            <div class="display-4 mb-2" id="avg-air-quality">--</div>
+                                            <div class="small text-muted">Ideal: < 800 ppm CO₂</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Nível de Ruído</h5>
+                                            <div class="display-4 mb-2" id="avg-noise">--</div>
+                                            <div class="small text-muted">Ideal: < 50 dB</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Salas Monitoradas</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="alert-toggle" checked />
+                                <label class="form-check-label" for="alert-toggle">Mostrar Alertas</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="rooms-container">
+                                <!-- Salas serão inseridas aqui via JavaScript -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 room-card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Sala 1 - 5º Ano A</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Temperatura</div>
+                                                        <div class="fs-4 parameter normal">24.5°C</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Umidade</div>
+                                                        <div class="fs-4 parameter normal">45%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Qualidade do Ar</div>
+                                                        <div class="fs-4 parameter warning">850 ppm</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Ruído</div>
+                                                        <div class="fs-4 parameter normal">48 dB</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted small">Atualizado: 12:45</span>
+                                                <a href="historico.html?sala=1" class="btn btn-sm btn-primary">Detalhes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 room-card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Sala 2 - 7º Ano B</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Temperatura</div>
+                                                        <div class="fs-4 parameter warning">29.2°C</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Umidade</div>
+                                                        <div class="fs-4 parameter normal">52%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Qualidade do Ar</div>
+                                                        <div class="fs-4 parameter normal">720 ppm</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Ruído</div>
+                                                        <div class="fs-4 parameter danger">74 dB</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted small">Atualizado: 12:47</span>
+                                                <a href="historico.html?sala=2" class="btn btn-sm btn-primary">Detalhes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 room-card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Sala 3 - Laboratório</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Temperatura</div>
+                                                        <div class="fs-4 parameter normal">23.8°C</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Umidade</div>
+                                                        <div class="fs-4 parameter warning">28%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Qualidade do Ar</div>
+                                                        <div class="fs-4 parameter normal">650 ppm</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 border rounded text-center">
+                                                        <div class="small">Ruído</div>
+                                                        <div class="fs-4 parameter normal">42 dB</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted small">Atualizado: 12:50</span>
+                                                <a href="historico.html?sala=3" class="btn btn-sm btn-primary">Detalhes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">Temperatura (últimas 24h)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="temperature-chart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">Umidade (últimas 24h)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="humidity-chart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">Qualidade do Ar (últimas 24h)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="air-quality-chart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">Nível de Ruído (últimas 24h)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="noise-chart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Alertas Recentes</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Data/Hora</th>
+                                            <th>Sala</th>
+                                            <th>Parâmetro</th>
+                                            <th>Valor</th>
+                                            <th>Limite</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="alerts-table">
+                                        <tr>
+                                            <td>12/04/2025 11:30</td>
+                                            <td>Sala 2 - 7º Ano B</td>
+                                            <td>Temperatura</td>
+                                            <td>29.8°C</td>
+                                            <td>26.0°C</td>
+                                            <td><span class="badge bg-warning">Ativo</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>12/04/2025 10:45</td>
+                                            <td>Sala 2 - 7º Ano B</td>
+                                            <td>Ruído</td>
+                                            <td>78 dB</td>
+                                            <td>70 dB</td>
+                                            <td><span class="badge bg-danger">Ativo</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>12/04/2025 09:15</td>
+                                            <td>Sala 3 - Laboratório</td>
+                                            <td>Umidade</td>
+                                            <td>27%</td>
+                                            <td>30%</td>
+                                            <td><span class="badge bg-warning">Ativo</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>12/04/2025 08:30</td>
+                                            <td>Sala 1 - 5º Ano A</td>
+                                            <td>Qualidade do Ar</td>
+                                            <td>1050 ppm</td>
+                                            <td>1000 ppm</td>
+                                            <td><span class="badge bg-secondary">Resolvido</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <a href="relatorios.html#alertas" class="btn btn-sm btn-outline-primary">Ver todos os alertas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-light py-3 mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-0">Sistema de Monitoramento Ambiental para Escolas Públicas</p>
+                        <p class="text-muted small mb-0">Projeto de Extensão - Programação de Microcontroladores</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0 small">
+                            <a href="https://github.com/seu-usuario/sistema-monitoramento-ambiental-escolar" target="_blank" class="text-decoration-none">
+                                <img src="img/icons/github.svg" alt="GitHub" width="16" height="16" class="me-1" />
+                                Código fonte no GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal de Alertas -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-white">
+                        <h5 class="modal-title" id="alertModalLabel">Alerta de Parâmetro</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Sala:</strong> <span id="alert-room">--</span></p>
+                        <p><strong>Parâmetro:</strong> <span id="alert-parameter">--</span></p>
+                        <p><strong>Valor Atual:</strong> <span id="alert-value">--</span></p>
+                        <p><strong>Limite:</strong> <span id="alert-limit">--</span></p>
+                        <p><strong>Recomendação:</strong> <span id="alert-recommendation">--</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="alert-details-btn">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/moment.min.js"></script>
+        <script src="js/chart.min.js"></script>
+        <script src="js/thingspeak.js"></script>
+        <script src="js/sensors.js"></script>
+        <script src="js/dashboard.js"></script>
+    </body>
+</html>

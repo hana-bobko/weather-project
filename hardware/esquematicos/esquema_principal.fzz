@@ -1,0 +1,52 @@
+# Esquemático do Circuito
+
+## Arquivos incluídos:
+
+1. `esquema_principal.fzz` - Arquivo editável do Fritzing para o esquema do circuito completo
+2. `esquema_principal.pdf` - Versão PDF do esquemático para visualização e impressão
+
+## Como usar estes arquivos:
+
+### Arquivo Fritzing (.fzz)
+O arquivo `esquema_principal.fzz` é o projeto completo do esquemático no formato Fritzing. Para editá-lo:
+
+1. Baixe e instale o [Fritzing](https://fritzing.org/)
+2. Abra o arquivo .fzz no Fritzing
+3. Você poderá editar o esquema conforme necessário para adaptá-lo às suas necessidades específicas
+
+### Arquivo PDF (.pdf)
+O arquivo `esquema_principal.pdf` é a versão exportada do esquemático, pronta para visualização ou impressão. Este arquivo pode ser aberto com qualquer leitor de PDF padrão (Adobe Reader, Preview, etc.).
+
+## Informações sobre o esquemático:
+
+O esquemático inclui todos os componentes do Sistema de Monitoramento Ambiental e suas conexões:
+
+- ESP32 (ou Arduino + módulo WiFi)
+- Sensor DHT22 (temperatura e umidade)
+- Sensor MQ-135 (qualidade do ar)
+- Sensor KY-038 (ruído)
+- Módulo de cartão SD
+- Display LCD 16x2 com I2C
+- Conexões de alimentação e resistores necessários
+
+## Observações importantes:
+
+1. As posições exatas dos pinos podem variar dependendo do modelo específico do ESP32 ou Arduino que você estiver utilizando. Consulte o datasheet do seu microcontrolador.
+
+2. O esquemático inclui um circuito de alimentação com proteção básica. Em uma implementação real, considere adicionar capacitores de filtragem adicionais.
+
+3. O sensor MQ-135 requer um período de aquecimento para estabilização. Isto está refletido no código, mas é importante considerar isso ao instalar o sistema.
+
+4. Os resistores pull-up específicos podem precisar de ajustes dependendo da qualidade dos seus componentes e comprimento dos fios.
+
+## Observação sobre os arquivos:
+
+**Nota:** Para o projeto real, você precisará criar estes arquivos usando o software Fritzing. Os arquivos esquema_principal.fzz e esquema_principal.pdf devem ser gerados por você com base nas especificações fornecidas no resto da documentação, especialmente no arquivo `esquema-circuito.md` que contém todos os detalhes de conexão.
+
+Para criar o esquemático no Fritzing:
+1. Adicione todos os componentes necessários
+2. Faça as conexões conforme detalhado na documentação
+3. Organize o layout para máxima clareza
+4. Exporte como PDF para referência fácil
+
+Se você não tem experiência com Fritzing, existem vários tutoriais online que podem ajudar.
